@@ -1,0 +1,39 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+}
+h1 {
+  color: #333;
+}
+.photo-container {
+  display: inline-block;
+  margin: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+img {
+  max-width: 200px;
+  height: auto;
+  border-radius: 5px;
+}
+.votes {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+}
+.ranking-link {
+  position: absolute; /* Agrega esta línea */
+  top: 10px; /* Agrega esta línea */
+  right: 10px; /* Agrega esta línea */
+  display: inline-block;
+  margin-top: 70px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}

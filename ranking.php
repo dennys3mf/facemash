@@ -12,17 +12,23 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Obtener las fotos ordenadas por votos
-$sql = "SELECT * FROM photos ORDER BY votes DESC";
+// Obtener el ranking de las fotos y videos más votados
+$sql = "SELECT * FROM content ORDER BY votes DESC";
 $result = $conn->query($sql);
-$photos = $result->fetch_all(MYSQLI_ASSOC);
+
+// Verificar si la consulta fue exitosa
+if ($result === false) {
+    die("Error en la consulta SQL: " . $conn->error);
+}
+
+$content = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ranking - Facemash</title>
+    <title>Ranking</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +38,7 @@ $photos = $result->fetch_all(MYSQLI_ASSOC);
         h1 {
             color: #333;
         }
-        .photo-container {
+        .content-container {
             display: inline-block;
             margin: 20px;
             padding: 10px;
@@ -41,44 +47,24 @@ $photos = $result->fetch_all(MYSQLI_ASSOC);
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        img {
+        img, video {
             max-width: 200px;
             height: auto;
             border-radius: 5px;
         }
-        .votes {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #555;
-        }
-        .ranking-link {
-            position: absolute; /* Agrega esta línea */
-        top: 10px; /* Agrega esta línea */
-        right: 10px; /* Agrega esta línea */
-            display: inline-block;
-            margin-top: 70px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
     </style>
 </head>
 <body>
-    <h1>Ranking - Facemash</h1>
-    <a class="ranking-link" href="index.php">Volver a votar</a>
-    <?php foreach ($photos as $photo): ?>
-        <div class="photo-container">
-            <img src="<?php echo htmlspecialchars($photo['url']); ?>" alt="Photo">
-            <div class="votes">Votes: <?php echo $photo['votes']; ?></div>
+    <h1>Ranking de Fotos y Videos</h1>
+    <?php foreach ($content as $item): ?>
+        <div class="content-container">
+            <?php if ($item['type'] == 'photo'): ?>
+                <img src="<?php echo htmlspecialchars($item['url']); ?>" alt="Photo">
+            <?php else: ?>
+                <video src="<?php echo htmlspecialchars($item['url']); ?>" controls></video>
+            <?php endif; ?>
+            <p>Votes: <?php echo $item['votes']; ?></p>
         </div>
     <?php endforeach; ?>
-    <br>
 </body>
 </html>
-
-<?php
-$conn->close();
-?>
